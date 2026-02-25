@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Kaspi</title>
+  </head>
+    
+  <button *ngFor="let category of categories"
+        (click)="selectCategory(category.id)">
+  {{ category.name }}
+  </button>
+
+</html>
