@@ -1,6 +1,27 @@
 from django.http import JsonResponse
 from .models import Product, Category
 
+# lab 9
+from rest_framework import viewsets
+from .serializers import CategorySerializer, ProductSerializer
+from rest_framework.decorators import action
+from rest_framework.response import Response
+
+class ProductViewSet(viewsets.ModelViewSet):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+
+class CategoryViewSet(viewsets.ModelViewSet):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
+
+    @action(detail=True, methods=['get'])
+    def products(self, request, pk=None):
+        category = self.get_object()
+        products = Product.objects.filter(category=category)
+        serializer = ProductSerializer(products, many=True)
+        return Response(serializer.data)
+# --
 
 def products_list(request):
     products = Product.objects.all()
@@ -80,4 +101,4 @@ def category_products(request, id):
 
         return JsonResponse(data, safe=False)
     except:
-        return JsonResponse({"error": "Something went wrong"})
+        return JsonResponse({"error": "Something went wrong("})
