@@ -1,0 +1,34 @@
+from rest_framework.mixins import (
+    ListModelMixin,
+    CreateModelMixin,
+    RetrieveModelMixin,
+    UpdateModelMixin,
+    DestroyModelMixin
+)
+from rest_framework.generics import GenericAPIView
+from api.models import Product
+from api.serializers import ProductSerializer
+
+class ProductListAPIView( ListModelMixin, CreateModelMixin, GenericAPIView ):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+
+    def get(self, request):
+        return self.list(request)
+
+    def post(self, request):
+        return self.create(request)
+
+class ProductDetailAPIView( RetrieveModelMixin, UpdateModelMixin, DestroyModelMixin, GenericAPIView ):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+    lookup_url_kwarg = 'product_id'
+
+    def get(self, request, product_id):
+        return self.retrieve(request)
+
+    def put(self, request, product_id):
+        return self.update(request)
+
+    def delete(self, request, product_id):
+        return self.destroy(request)
